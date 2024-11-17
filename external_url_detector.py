@@ -21,26 +21,42 @@
 import requests  # For making HTTP requests to Wikipedia's API
 import re        # For using regular expressions to detect URLs in the response
 import io        # For capturing printed output
-import sys       # For redirecting standard output
+import sys       # For redirecting standard output      # For using regular expressions to detect URLs in the response
 
-def detect_external_urls(response, output_list):
+def detect_external_urls(response):
     """
-    This function checks the response text for URLs that do not belong to Wikipedia.
+    This function checks the response text for URLs and separates the external ones from internal ones.
     
     Arguments:
     - response: The HTTP response object from Wikipedia's API.
-    - output_list: A list to store external URLs.
     
-    This function will append any external URLs found in the response text to the list.
+    This function will collect all URLs and then display them at the end along with a list of external URLs.
     """
     # Find all URLs in the response text using regular expression
     urls = re.findall(r'https?://[^\s]+', response.text)
     
+    # List to store external URLs
+    external_urls = []
+
+    # Print all URLs first
+    print("All URLs found in the response:")
+    for url in urls:
+        print(url)
+    
     # Iterate through each detected URL and check if it's an external link
     for url in urls:
         if "wikipedia.org" not in url:
-            # If the URL is not part of Wikipedia's domain, append it to the list
-            output_list.append(url)
+            # If the URL is not part of Wikipedia's domain, add it to the list
+            external_urls.append(url)
+
+    # Output all external URLs detected at the end
+    if external_urls:
+        print("____________________________________________________________________________________")
+        print("External URLs detected:")
+        for url in external_urls:
+            print(url)
+    else:
+        print("No external URLs detected.")
 
 def query_wikipedia_article(title):
     """
@@ -53,33 +69,9 @@ def query_wikipedia_article(title):
     response = requests.get(url)
     
     if response.status_code == 200:
-        # Create a list to store external URLs
-        external_urls = []
-        detect_external_urls(response, external_urls)
-        
-        # If external URLs are found, return the list
-        if external_urls:
-            print("External URLs detected:")
-            for url in external_urls:
-                print(url)
-        else:
-            print("No external URLs detected.")
+        detect_external_urls(response)
     else:
         print(f"Error fetching article. Status code: {response.status_code}")
 
-# Redirecting the print statements to capture them
-original_stdout = sys.stdout  # Save the original stdout
-sys.stdout = io.StringIO()    # Create a StringIO object to capture output
-
 # Query a Wikipedia article (e.g., "Python (programming language)")
 query_wikipedia_article("Python_(programming_language)")
-
-# Capture the output and store it in a variable
-captured_output = sys.stdout.getvalue()
-
-# Reset stdout back to its original state
-sys.stdout = original_stdout
-
-# You can now inspect or process captured_output to find any external URLs
-print("Captured Output:")
-print(captured_output)
