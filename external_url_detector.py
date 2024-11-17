@@ -102,8 +102,6 @@ def detect_external_urls(response):
 
     # Output all external URLs detected at the end with more detailed formatting
     if external_urls:
-        print("____________________________________________________________________________________")
-        print("External URLs detected:\n")
         for url in external_urls:
             # Extract the domain name from the URL
             domain = urlparse(url).netloc
@@ -111,18 +109,18 @@ def detect_external_urls(response):
             # Fetch additional information about the external URL
             external_info = fetch_external_url_info(url)
             
-            # Format the output with Name, Link, and Domain Info
-            print(f"Name: {domain} | Link: {url} | Protocol: {url.split(':')[0].upper()} | Status Code: {external_info['status_code']} | "
-                  f"Content Type: {external_info['content_type']} | Load Time: {external_info['load_time']}s")
-
-            # Add the title and description if available
-            if external_info['title'] != 'N/A':
-                print(f"  Title: {external_info['title']}")
-            if external_info['description'] != 'N/A':
-                print(f"  Description: {external_info['description']}")
-            
-            # Add a separator line for clarity
-            print("____________________________________________________________________________________")
+            # Output the information in format
+            print("+----------------+---------------------------+")
+            print(f"| Name:          | {domain:<25} |")
+            print(f"| Title:         | {external_info['title']:<25} |")
+            print(f"| Link:          | {url:<25} |")
+            print(f"| Protocol:      | {url.split(':')[0].upper():<25} |")
+            print(f"| Status Code:   | {external_info['status_code']:<25} |")
+            print(f"| Content Type:  | {external_info['content_type']:<25} |")
+            print(f"| Load Time:     | {external_info['load_time']}s                     |")
+            print(f"| Description:   | {external_info['description']:<25} |")
+            print("+----------------+---------------------------+")
+            print()  # Add extra space between blocks
     else:
         print("No external URLs detected.")
 
