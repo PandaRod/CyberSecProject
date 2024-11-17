@@ -141,3 +141,13 @@ def query_wikipedia_article(title):
 
 # Query a Wikipedia article (e.g., "Python (programming language)")
 query_wikipedia_article("Python_(programming_language)")
+
+# To run this script, you need to install the following libraries:
+# 1. requests - For making HTTP requests to Wikipedia's API.
+# 2. beautifulsoup4 - For parsing HTML content from external URLs.
+# 3. re - For using regular expressions to detect URLs in the response.
+# 4. urllib - For parsing and extracting domain names from URLs.
+#
+# Install the required libraries using pip:
+# pip install requests
+# pip install beautifulsoup4
