@@ -18,10 +18,61 @@
 # might transmit sensitive data to external networks or services. The method helps detect unintentional or harmful data sharing, maintaining
 # data privacy and security during interaction with the Wikipedia API.
 
-import requests  # For making HTTP requests to Wikipedia's API
-import re        # For using regular expressions to detect URLs in the response
-import io        # For capturing printed output
-import sys       # For redirecting standard output      # For using regular expressions to detect URLs in the response
+import requests  # For making HTTP requests
+import re        # For using regular expressions to detect URLs
+from urllib.parse import urlparse  # To extract the domain name
+from bs4 import BeautifulSoup  # To parse HTML content
+import time  # To measure page load time
+
+def fetch_external_url_info(url):
+    """
+    This function fetches additional information about an external URL:
+    - HTTP status code
+    - Content type
+    - Title of the page
+    - Meta description
+    - Page load time
+    """
+    try:
+        # Start the timer to measure page load time
+        start_time = time.time()
+        
+        # Send a GET request to fetch the external URL's content
+        response = requests.get(url, timeout=5)
+        
+        # Calculate the page load time
+        load_time = round(time.time() - start_time, 2)
+        
+        # Extract the status code
+        status_code = response.status_code
+        
+        # Extract the content type
+        content_type = response.headers.get('Content-Type', 'N/A')
+        
+        # Parse HTML to extract the title and meta description
+        title = "N/A"
+        description = "N/A"
+        if 'html' in content_type:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            title_tag = soup.find('title')
+            if title_tag:
+                title = title_tag.text
+            description_tag = soup.find('meta', attrs={'name': 'description'})
+            if description_tag:
+                description = description_tag.get('content', 'N/A')
+        
+        # Return a dictionary of the gathered information
+        return {
+            'status_code': status_code,
+            'content_type': content_type,
+            'title': title,
+            'description': description,
+            'load_time': load_time
+        }
+    
+    except requests.exceptions.RequestException as e:
+        # If an error occurs (e.g., network issue), return a failed status
+        return {'status_code': 'Error', 'content_type': 'N/A', 'title': 'N/A', 'description': 'N/A', 'load_time': 'N/A'}
 
 def detect_external_urls(response):
     """
@@ -42,19 +93,36 @@ def detect_external_urls(response):
     print("All URLs found in the response:")
     for url in urls:
         print(url)
-    
+
     # Iterate through each detected URL and check if it's an external link
     for url in urls:
         if "wikipedia.org" not in url:
             # If the URL is not part of Wikipedia's domain, add it to the list
             external_urls.append(url)
 
-    # Output all external URLs detected at the end
+    # Output all external URLs detected at the end with more detailed formatting
     if external_urls:
         print("____________________________________________________________________________________")
-        print("External URLs detected:")
+        print("External URLs detected:\n")
         for url in external_urls:
-            print(url)
+            # Extract the domain name from the URL
+            domain = urlparse(url).netloc
+
+            # Fetch additional information about the external URL
+            external_info = fetch_external_url_info(url)
+            
+            # Format the output with Name, Link, and Domain Info
+            print(f"Name: {domain} | Link: {url} | Protocol: {url.split(':')[0].upper()} | Status Code: {external_info['status_code']} | "
+                  f"Content Type: {external_info['content_type']} | Load Time: {external_info['load_time']}s")
+
+            # Add the title and description if available
+            if external_info['title'] != 'N/A':
+                print(f"  Title: {external_info['title']}")
+            if external_info['description'] != 'N/A':
+                print(f"  Description: {external_info['description']}")
+            
+            # Add a separator line for clarity
+            print("____________________________________________________________________________________")
     else:
         print("No external URLs detected.")
 
