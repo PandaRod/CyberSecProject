@@ -39,10 +39,20 @@ def detect_external_urls(response):
             # If the URL is not part of Wikipedia's domain, print it
             print(f"External URL detected: {url}")
 
-# Requirements:
-# 1. You need Python installed on your system.
-# 2. The script requires the `requests` and `re` libraries.
-#    - `requests` is used to make the HTTP request to Wikipedia's API.
-#    - `re` is used to search for URLs in the API response.
-# 3. Install the `requests` library with the command: 
-#    pip install requests
+def query_wikipedia_article(title):
+    """
+    This function sends a request to Wikipedia's API to fetch the content of a given article.
+    
+    Arguments:
+    - title: The title of the Wikipedia article to fetch.
+    """
+    url = f"https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles={title}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        detect_external_urls(response)
+    else:
+        print(f"Error fetching article. Status code: {response.status_code}")
+
+# Query a Wikipedia article (e.g., "Python (programming language)")
+query_wikipedia_article("Python_(programming_language)")
