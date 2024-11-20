@@ -1,28 +1,110 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import unittest
+from unittest.mock import patch, Mock
 import requests
+from datetime import datetime
 
-# Initialize WebDriver
-driver = webdriver.Chrome()  # Replace with WebDriver browser in use 
-wait = WebDriverWait(driver, 10)
-
-def monitor_network_traffic():
+def feed_data(data_type):
     """
-    Stub function to simulate network monitoring.
-    Replace this with tools like a proxy server or traffic analyzer.
+    Prepare API parameters based on the requested data type.
     """
-    print("Monitoring network traffic...")
+    if data_type == "geo":
+        return {
+            "format": "json",
+            "list": "geosearch",
+            "gscoord": "29.886829786|-97.93666292",
+            "gslimit": "10",
+            "gsradius": "10000",
+            "action": "query"
+        }
+    elif data_type == "date":
+        return datetime.today()
+    elif data_type == "user":
+        return {
+            "action": "query",
+            "meta": "userinfo",
+            "uiprop": "rights",
+            "format": "json"
+        }
+    else:
+        raise ValueError("Invalid data type")
 
-def test_user_registration():
-    print("Testing user registration...")
-    driver.get("https://www.chegg.com/register")  # Replace with the actual registration page URL
+def saint_algorithm(input_data, session=None):
+    """
+    Handles API queries based on the input type.
+    """
+    session = session or requests.Session()
+    if input_data == "geosearch":
+        params = feed_data("geo")
+        response = session.get("https://en.wikipedia.org/w/api.php", params=params)
+        return response.json()
+    elif input_data == "date":
+        return feed_data("date")
+    elif input_data == "user":
+        params = feed_data("user")
+        response = session.get("https://en.wikipedia.org/w/api.php", params=params)
+        return response.json()
+    else:
+        raise ValueError("Invalid input")
 
-    # Fill registration form
-    driver.find_element(By.ID, "email").send_keys("testuser@example.com")
-    driver.find_element(By.ID, "password").send_keys("TestPassword123")
-    driver.find_element(By.ID, "submit").click()
-  monitor_network_traffic()
-    print("User registration test completed.")
+class TestFeedData(unittest.TestCase):
+    def test_feed_data_geo(self):
+        expected = {
+            "format": "json",
+            "list": "geosearch",
+            "gscoord": "29.886829786|-97.93666292",
+            "gslimit": "10",
+            "gsradius": "10000",
+            "action": "query"
+        }
+        self.assertEqual(feed_data("geo"), expected)
+
+    def test_feed_data_date(self):
+        self.assertIsInstance(feed_data("date"), datetime)
+
+    def test_feed_data_user(self):
+        expected = {
+            "action": "query",
+            "meta": "userinfo",
+            "uiprop": "rights",
+            "format": "json"
+        }
+        self.assertEqual(feed_data("user"), expected)
+
+    def test_feed_data_invalid(self):
+        with self.assertRaises(ValueError):
+            feed_data("invalid")
+
+
+class TestSaintAlgorithm(unittest.TestCase):
+    @patch("requests.Session.get")
+    def test_saint_algorithm_geosearch(self, mock_get):
+        mock_response = Mock()
+        mock_response.json.return_value = {"query": {"geosearch": []}}
+        mock_get.return_value = mock_response
+
+        result = saint_algorithm("geosearch")
+        self.assertIn("query", result)
+        self.assertIn("geosearch", result["query"])
+
+    @patch("requests.Session.get")
+    def test_saint_algorithm_user(self, mock_get):
+        mock_response = Mock()
+        mock_response.json.return_value = {"query": {"userinfo": {}}}
+        mock_get.return_value = mock_response
+
+        result = saint_algorithm("user")
+        self.assertIn("query", result)
+        self.assertIn("userinfo", result["query"])
+
+    def test_saint_algorithm_date(self):
+        result = saint_algorithm("date")
+        self.assertIsInstance(result, datetime)
+
+    def test_saint_algorithm_invalid(self):
+        with self.assertRaises(ValueError):
+            saint_algorithm("invalid")
+
+
+if __name__ == '__main__':
+    unittest.main()
+
