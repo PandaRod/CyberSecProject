@@ -362,3 +362,62 @@ DATA2 = DATA['query']['pages']
 print(DATA2)
 
 '''
+def test_saint_algorithm():
+    # Test case for "geosearch" (Sensitive data leak potential)
+    result = saint_algorithm("geosearch")
+    if 'geosearch' in result:
+        print("Data leakage found: Geosearch data returned:", result)
+    else:
+        print("No data leaked: Geosearch results do not contain sensitive data.")
+
+    # Test case for "user" (Sensitive data leak potential)
+    result = saint_algorithm("user")
+    if 'userinfo' in result:
+        print("Data leakage found: User info returned:", result)
+    else:
+        print("No data leaked: User info not returned.")
+
+    # Test case for "random" (Should not leak sensitive data)
+    result = saint_algorithm("random")
+    if isinstance(result, list) and len(result) > 0:
+        print("No data leaked: Random data returned:", result)
+    else:
+        print("No data leaked: No random data returned.")
+
+    # Test case for "links" (Should not return sensitive data)
+    result = saint_algorithm("links")
+    if isinstance(result, dict) and len(result) > 0:
+        print("No data leaked: Links returned:", result)
+    else:
+        print("No data leaked: No links returned.")
+
+    # Test case for "summary" (No sensitive data, only summaries)
+    result = saint_algorithm("summary")
+    if 'Texas State University' in result:
+        print("No data leaked: Summary of Texas State University returned.")
+    else:
+        print("No data leaked: Summary of Texas State University not returned.")
+
+    # Test case for "categories" (Low risk, but still check)
+    result = saint_algorithm("categories")
+    if 'categories' in result:
+        print("No data leaked: Categories returned:", result)
+    else:
+        print("No data leaked: No categories data returned.")
+
+    # Test case for "lang" (Should not leak any sensitive data)
+    result = saint_algorithm("lang")
+    if isinstance(result, list) and len(result) > 0:
+        print("No data leaked: Language list returned:", result)
+    else:
+        print("No data leaked: No language data returned.")
+
+    # Test case for "contributors" (Sensitive data leak potential)
+    result = saint_algorithm("contributors")
+    if 'contributors' in result:
+        print("Data leakage found: Contributor data returned:", result)
+    else:
+        print("No data leaked: No contributor data returned.")
+
+# Call the test function
+test_saint_algorithm()
