@@ -13,7 +13,7 @@
 ## How to run
 
 ### Requirements
- * [Python 3][https://www.python.org/downloads/]
+ * [Python 3](https://www.python.org/downloads/)
  * Wikipedia
     * pip install wikipedia
  * Wikipedia api
