@@ -8,7 +8,7 @@
  * Gage Buckley
 
 ## Description
-
+This code implements a replica of the attack method used in the SainT algorithm from ___. It checks for data leaks using the wikipedia api which can retrieve multiple things including geosearch, date & time, and info on the user.
 
 ## How to run
 
@@ -25,3 +25,5 @@
 
 ### How to run
  * Run Wiki Interact.py
+
+## Research
