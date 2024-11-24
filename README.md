@@ -7,7 +7,12 @@
  * Rodrigo Pandal
  * Gage Buckley
 
-## Requirements
+## Description
+
+
+## How to run
+
+### Requirements
  * [Python 3][https://www.python.org/downloads/]
  * Wikipedia
     * pip install wikipedia
@@ -18,4 +23,5 @@
  * Numpy
     * pip install numpy
 
-## How to run
+### How to run
+ * Run Wiki Interact.py
