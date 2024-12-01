@@ -32,7 +32,7 @@ the user can see the types of information that is trasnfered through wikipedia a
  * Numpy
     * `pip install numpy`
   
-### *How to Clone Repository**
+### **How to Clone Repository**
  * With the provided link, you can use it to clone our repo in your preferred IDE
  * From the github link, you can also go to the "<> Code" sections and in the dropdown click "Download ZIP" to download a zip file with all the code (The files will first have to be extracted from the zip file before they can run properly)
     * After files have been extracted, make sure to change to the directory where the files are located if trying to run the code on a terminal.
