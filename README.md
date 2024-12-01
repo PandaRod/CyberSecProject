@@ -8,7 +8,7 @@
  * Gage Buckley
 
 ## **Description**
-This code implements a replica of the attack method used in the SainT algorithm from ___. It checks for data leaks using the Wikipedia API, which can retrieve multiple types of information, including:
+This code implements a replica of the attack method used in the SainT algorithm from the paper Sensitive Information Tracking in Commodity IoT. It checks for data leaks using the Wikipedia API, which can retrieve multiple types of information, including:
 - Geolocation (via geosearch)
 - Date & time
 - Other user-specific data
@@ -30,6 +30,7 @@ The aim is to simulate a potential privacy issue within IoT ecosystems by checki
 
 ### **How to run**
  * Run `Wiki_Interact.py`
+ * Input one of the listed types of data
 
 ## **Research**
 
