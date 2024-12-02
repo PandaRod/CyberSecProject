@@ -1,15 +1,12 @@
-import wikipediaapi
 import wikipedia
-import json
 import requests
-import numpy as np
 
 
 # THINGS WE CAN GET FROM WIKIPEDIA API:
 # 1. "datetime" - Current data and time (potentially sensitive data)
 # 2. "geosearch" - Gives articles around the given point/location (sensitive data leak)
 # 3. "user" - Return account info for the currently logged-in user in JSON (sensitive data leak)
-# 4. "search" - Returns the information of a page with the provided title (potential sensitive data)
+# 4. "page" - Returns the information of a page with the provided title (potential sensitive data)
 # 5. "random" - Returns the information of random pages (potential data leak)
 # 6. "links" - Return all links on the page with the given title (potential data leak)
 # 7. "summary" - Returns a summary of the page with the given title (potential data leak)
