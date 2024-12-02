@@ -22,7 +22,7 @@ the user can see the types of information that is trasnfered through wikipedia a
 ## **How to run**
 
 ### **Requirements**
- * [Python 3](https://www.python.org/downloads/)
+ * [Python 3](https://www.python.org/downloads/) (make sure to have version 12 at least)
  * Wikipedia
     * `pip install wikipedia`
  * Wikipedia API
