@@ -47,6 +47,9 @@ the user can see the types of information that is trasnfered through wikipedia a
 ## **Running Testcases** 
  * Run 'Tester.py'
 
+## **Video Demo of Program**
+ * [Click this link](https://youtu.be/xgvZET97gWM) to see a video demo of the system
+
 ## **Research**
 
 ### **1st Source:** [Sensitive Information Tracking in Commodity IoT](https://arxiv.org/pdf/1802.08307v1)
