@@ -29,6 +29,8 @@ the user can see the types of information that is trasnfered through wikipedia a
     * `pip install wikipedia-api`
  * Requests
     * `pip install requests`
+ * Datetime
+    * 'pip install datetime'
  * Numpy
     * `pip install numpy`
   
